@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+    <title>Alimentazione databse</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="center">      
+            <input type="text" id="folderPath" class="textbox" placeholder="Percorso della cartella da scansionare"><br>
+            <input type="text" id="image_category" class="textbox" placeholder="Categoria immagini"><br>
+            <button id="buttonLoad" class="button" onclick="sendFolderPath()">Invia</button>   
+    </div>  
+    <script>
+        function sendFolderPath() {
+            // Ottieni il valore della textbox (percorso della cartella)
+            var requestData = {
+                path: document.getElementById('folderPath').value,
+                category: document.getElementById('image_category').value
+            }
+            var button = document.getElementById("buttonLoad");
+            button.innerText = "Attendi...";
+            // Invia il percorso della cartella al server Flask
+            fetch('/alimentadb', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+                
+            })
+                .then(response => {
+                    if (response.ok) {
+                        //Al termine del caricamento cambio il testo del pulsante
+                        console.log('fatto');
+                        button.innerText = "Inserimento Completato";
+
+                    }
+                });
+
+
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+    <title>Modalità ricerca immagini simili</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+
+<body>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('log', function (msg) {
+            var logArea = document.getElementById('message');
+            console.log(msg)
+            logArea.innerText = msg;
+        });
+        socket.on('result', function (msg) {
+            var logArea = document.getElementById('contenitore');
+
+            // Creo un div per contenere l'immagine e la categoria
+            var divContenuto = document.createElement("div");
+            divContenuto.className = "contenuto";
+
+            // Creo un elemento immagine
+            var img = document.createElement("img");
+            // Imposto l'attributo src con il percorso dell'immagine
+            img.src = "{{ url_for('static', filename='') }}" + msg[0];
+
+            // Aggiungi l'immagine al div del contenuto
+            divContenuto.appendChild(img);
+
+            // Creo un elemento per mostrare la categoria
+            var categoria = document.createElement("p");
+            categoria.textContent = "Categoria: " + msg[1];
+
+            // Aggiungo la categoria al div del contenuto
+            divContenuto.appendChild(categoria);
+
+            // Aggiungo il div del contenuto al contenitore principale
+            contenitore.appendChild(divContenuto);
+        });
+        socket.on('time', function (msg) {
+            var logArea = document.getElementById('message');
+            // Crea un elemento testo
+            logArea.innerHTML = "<p></p>" + msg;
+        });
+    </script>
+
+
+    <div class="center">
+        <!-- Textbox per inserire il percorso della cartella -->
+        <input type="text" id="folderPath" class="textbox" placeholder="Inserisci il percorso della cartella da analizzare">
+        
+        <!-- Pulsante per inviare il percorso della cartella -->
+        <button id="buttonLoad" class="button" onclick="sendFolderPath()">Invia</button>
+        <br>  
+        <div id="message"></div>
+        <br>
+        <br>
+        <div class="contenitore" id="contenitore"></div>
+    </div>
+
+    <script>
+        function sendFolderPath() {
+            // Ottieni il valore della textbox (percorso della cartella)
+            var folderPath = {
+                path: document.getElementById('folderPath').value
+            };
+            var button = document.getElementById("buttonLoad");
+            button.innerText = "Attendi...";
+            
+            // Invia il percorso della cartella al server Flask
+            fetch('/folder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(folderPath)
+
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // se la richiesta è andata a buon fine 
+                        console.log('fatto');
+                        button.innerText = "Ricerca Completata";
+                        
+                    }
+                });
+
+        }
+    </script>
+
+</body>
+
+</html>

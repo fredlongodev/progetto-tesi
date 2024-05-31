@@ -1,0 +1,52 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: -webkit-fill-available;
+    overflow: hidden;
+    background-color: #1A1A1A;
+    color: white;
+    overflow-y: auto;
+    align-content: center;
+}
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 10px;
+    width: 400px;
+}
+
+.textbox {
+    padding: 10px;
+    font-size: 16px;
+    width: 400px;
+    margin-bottom: 10px; /* Aggiungi margine inferiore per separare dalla textbox */
+    margin-top: 10px;
+}
+
+/* Stile per l'immagine */
+img {
+    width: 200px; /* Imposta la larghezza a 200px */
+    height: auto; /* Imposta l'altezza automaticamente in base all'aspect ratio */
+}
+
+.contenitore {
+    width: 90%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.contenuto {
+    max-width: 200px; /* Imposta una larghezza massima per gli elementi */
+    margin-right: 10px;
+}
